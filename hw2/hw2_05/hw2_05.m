@@ -15,9 +15,7 @@
 %     number as a function of n. As n varies, how does the number of correct
 %     digits in the components of the computed solution relate to the condition
 %     number of the matrix?
-m = 23
-%rel_errs = zeros(m,1);
-%residuals = zeros(m,1);
+m = 33
 for n = 2:m
     n
     H = hilb(n);
@@ -38,6 +36,15 @@ for n = 2:m
     dx = norm(x_approx - ones(n,1),Inf);
     rel_errs(n) = dx;
 end
+
 plot(conds)
+title("Condition Number")
+xlabel("n");
 figure
-plot(rel_errs)
+
+plot(log10(rel_errs));
+title("log10(Relative Error)");
+xlabel("n");
+figure;
+plot(log10(residuals));
+xlabel("n");
