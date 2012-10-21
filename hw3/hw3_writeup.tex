@@ -1,0 +1,576 @@
+\documentclass{jhwhw}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage{xcolor}
+\usepackage{color}
+\usepackage{moreverb}
+\usepackage{paralist}
+\usepackage{multicol}
+
+\definecolor{MyDarkGreen}{rgb}{0.0,0.4,0.0}
+\lstloadlanguages{Matlab}%
+
+\definecolor{solarized@base03}{HTML}{002B36}
+\definecolor{solarized@base02}{HTML}{073642}
+\definecolor{solarized@base01}{HTML}{586e75}
+\definecolor{solarized@base00}{HTML}{657b83}
+\definecolor{solarized@base0}{HTML}{839496}
+\definecolor{solarized@base1}{HTML}{93a1a1}
+\definecolor{solarized@base2}{HTML}{EEE8D5}
+\definecolor{solarized@base3}{HTML}{FDF6E3}
+\definecolor{solarized@yellow}{HTML}{B58900}
+\definecolor{solarized@orange}{HTML}{CB4B16}
+\definecolor{solarized@red}{HTML}{DC322F}
+\definecolor{solarized@magenta}{HTML}{D33682}
+\definecolor{solarized@violet}{HTML}{6C71C4}
+\definecolor{solarized@blue}{HTML}{268BD2}
+\definecolor{solarized@cyan}{HTML}{2AA198}
+\definecolor{solarized@green}{HTML}{859900}
+
+\lstset{
+  language=Matlab,
+  columns=fixed,
+  tabsize=2,
+  extendedchars=true,
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numbersep=5pt,
+  rulesepcolor=\color{solarized@base03},
+  numberstyle=\tiny\color{solarized@base01},
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\color{solarized@green},
+  stringstyle=\color{solarized@cyan}\ttfamily,
+  identifierstyle=\color{solarized@blue},
+  commentstyle=\color{solarized@base01},
+  emphstyle=\color{solarized@red}
+}
+
+\relpenalty=9999
+\binoppenalty=9999
+
+\title{Homework Set 3}%replace X with the appropriate number
+\author{Jay Mundrawala}
+
+\begin{document}
+%%%%%%%%%%%% PROBLEM #1 %%%%%%%%%%%%%%%%%%%%%%%%%
+\problem{Scientific Computing 3.2, Page 149}
+Suppose you are fitting a straight line to the three data points
+(0,1), (1,2), (3,3).
+\begin{enumerate}
+  \item Set up the overdetermined lineary system for the least squares problem.
+  \item Set up the corresponding normal equations.
+  \item Compute the least squares solution by Cholesky factorization.
+\end{enumerate}
+\solution
+\part
+\[y = mx + b \]
+
+\[
+\begin{bmatrix}
+  1 & 0 \\
+  1 & 1 \\
+  1 & 3
+\end{bmatrix}
+\begin{bmatrix}
+  b \\
+  m
+\end{bmatrix}
+=
+\begin{bmatrix}
+  1 \\
+  2 \\
+  3
+\end{bmatrix}
+\]
+
+\part
+\[
+A^TAx = A^Tb
+\]
+
+\[
+\begin{bmatrix}
+  1 & 1 & 1 \\
+  0 & 1 & 3
+\end{bmatrix}
+\begin{bmatrix}
+  1 & 0 \\
+  1 & 1 \\
+  1 & 3
+\end{bmatrix}
+\begin{bmatrix}
+  b \\
+  m
+\end{bmatrix}
+=
+\begin{bmatrix}
+  1 & 1 & 1 \\
+  0 & 1 & 3
+\end{bmatrix}
+\begin{bmatrix}
+  1 \\
+  2 \\
+  3
+\end{bmatrix}
+\]
+
+\[
+\begin{bmatrix}
+  3 & 4 \\
+  4 & 10
+\end{bmatrix}
+\begin{bmatrix}
+  b \\
+  m
+\end{bmatrix}
+=
+\begin{bmatrix}
+  6 \\
+  11 
+\end{bmatrix}
+\]
+
+\part
+\[
+\begin{bmatrix}
+  a_{11} & a_{21} \\
+  a_{21} & a_{22}
+\end{bmatrix}
+=
+\begin{bmatrix}
+  l_{11} & 0 \\
+  l_{21} & l_{22}
+\end{bmatrix}
+\begin{bmatrix}
+  l_{11} & l_{21} \\
+  0      & l_{22}
+\end{bmatrix}
+\]
+
+\begin{eqnarray*}
+l_{11} &=& \sqrt{a_{11}} \\
+l_{21} &=& a_{21}/l_{11} \\
+l_{22} &=& \sqrt{a_{22} - l_{21}^2}
+\end{eqnarray*}
+
+\[
+L =
+\begin{bmatrix}
+  \sqrt{3}           & 0 \\
+  \frac{4}{\sqrt{3}} & \sqrt{10 - \frac{16}{3}}
+\end{bmatrix}
+=
+\begin{bmatrix}
+  \sqrt{3}           & 0 \\
+  \frac{4}{\sqrt{3}} & \sqrt{\frac{14}{3}}
+\end{bmatrix}
+\]
+
+\begin{eqnarray*}
+LL^Tx &=& b \\
+x &=& (L^T)^{-1}(L^{-1})b \\
+x &=& U^{-1}(L^{-1})b
+\end{eqnarray*}
+
+\[
+Lw=b
+\]
+
+\[
+\begin{bmatrix}
+  w_1 \\
+  w_2
+\end{bmatrix}
+=
+\begin{bmatrix}
+  6 \\
+  11
+\end{bmatrix}
+\]
+\begin{eqnarray*}
+  w_1 &=& \frac{6}{\sqrt{3}} \\
+  w_2 &=& \frac{11 - 8}{\sqrt{\frac{14}{3}}} = \frac{3\sqrt{3}}{\sqrt{14}}
+\end{eqnarray*}
+
+\[
+Ux = w
+\]
+\[
+\begin{bmatrix}
+  \sqrt{3}           & \frac{4}{\sqrt{3}} \\[6pt]
+   0 & \sqrt{\frac{14}{3}}
+\end{bmatrix}
+\begin{bmatrix}
+  b \\
+  m
+\end{bmatrix}
+=
+\begin{bmatrix}
+  \frac{6}{\sqrt{3}} \\[6pt]
+  \frac{3\sqrt{3}}{\sqrt{14}}
+\end{bmatrix}
+\]
+
+\[
+  m =  \frac{9}{14}
+\]
+
+\begin{eqnarray*}
+  \sqrt{3}b &=& \frac{6}{\sqrt{3}} - \frac{4}{\sqrt{3}}\frac{9}{14} \\
+  b &=& 2 - \frac{12}{14} \\ 
+  &=& \frac{8}{7} 
+\end{eqnarray*}
+
+\[
+x_{ls} = 
+\begin{bmatrix}
+  \frac{8}{7} \\[6pt]
+  \frac{9}{14}
+\end{bmatrix}
+\]
+
+%%%%%%%%%%%% PROBLEM #2 %%%%%%%%%%%%%%%%%%%%%%%%%
+\problem{Scientific Computing 3.5, Page 149}
+Let $x$ be the solution to the linear least squares problem \(Ax\cong b\), where
+\[
+A =
+\begin{bmatrix}
+  1 & 0 \\
+  1 & 1 \\
+  1 & 2 \\
+  1 & 3
+\end{bmatrix}
+\]
+Let \(r = b - Ax\) be the corresponding residual vector. Which of the following 
+three vectors is a possible value for r? Why?
+\begin{center}
+\begin{inparaenum}
+\item 
+  \(
+  \begin{bmatrix}
+	1 \\
+	1 \\
+	1 \\
+	1
+  \end{bmatrix}
+  \)
+\item 
+  \(
+  \begin{bmatrix}
+	-1 \\
+	-1 \\
+	 1 \\
+	 1
+  \end{bmatrix}
+  \)
+\item
+\(
+  \begin{bmatrix}
+	-1 \\
+	 1 \\
+	 1 \\
+	-1
+  \end{bmatrix}
+  \)
+\end{inparaenum}
+\end{center}
+\solution
+To have a linear least squares solution, \(A^Tr = 0\)
+\[
+A^Tr_a = 
+\begin{bmatrix}
+  4 \\
+  6
+\end{bmatrix}
+\]
+
+\[
+A^Tr_b = 
+\begin{bmatrix}
+  0 \\
+  4
+\end{bmatrix}
+\]
+
+\[
+A^Tr_c = 
+\begin{bmatrix}
+  0 \\
+  0
+\end{bmatrix}
+\]
+
+Since \(A^Tr\) is \(\textbf{\textit{0}}\) only for vector c, c is the least squares
+solution for A.
+
+%%%%%%%%%%%% PROBLEM #3 %%%%%%%%%%%%%%%%%%%%%%%%%
+\problem{Scientific Computing 3.17, Page 149}
+Determine the Householder transformation that annihilates all but the first entry of the
+vector \(
+\begin{bmatrix}
+  1 &
+  1 &
+  1 &
+  1
+\end{bmatrix}^T
+\). Specifically, if 
+\[
+\left(I - 2\frac{vv^T}{v^Tv}\right)
+\begin{bmatrix}
+  1 \\
+  1 \\
+  1 \\
+  1
+\end{bmatrix}
+=
+\begin{bmatrix}
+  \alpha \\
+  0 \\
+  0 \\
+  0
+\end{bmatrix}
+\]
+what are the values of $\alpha$ and $v$.
+\solution
+\begin{eqnarray*}
+  v &=& a - \alpha e_1 \\
+  \alpha &=& \pm \| a \|_2 = -2
+\end{eqnarray*}
+
+\[
+v = 
+\begin{bmatrix}
+  1 \\
+  1 \\
+  1 \\
+  1
+\end{bmatrix}
++
+2
+\begin{bmatrix}
+  1 \\
+  0 \\
+  0 \\
+  0
+\end{bmatrix}
+=
+\begin{bmatrix}
+  3 \\
+  1 \\
+  1 \\
+  1
+\end{bmatrix}
+\]
+Check:
+\[
+Ha = 
+\begin{bmatrix}
+  1 \\
+  1 \\
+  1 \\
+  1
+\end{bmatrix}
+-
+\frac{2*6}{12}
+\begin{bmatrix}
+  3 \\
+  1 \\
+  1 \\
+  1
+\end{bmatrix}
+=
+\begin{bmatrix}
+ -2 \\
+  0 \\
+  0 \\
+  0
+\end{bmatrix}
+\]
+%%%%%%%%%%%% PROBLEM #4 %%%%%%%%%%%%%%%%%%%%%%%%%
+\problem{Scientific Computing 3.23, Page 151}
+In Section 3.2.1 we objserved that the cross-product matrix $A^TA$ is exactly
+singulare in floating-point arithmetic if
+\[
+A = 
+\begin{bmatrix}
+  1 & 1 \\
+  \epsilon & 0 \\
+  0 & \epsilon
+\end{bmatrix}
+\]
+where $\epsilon$ is a positive number smaller than $\sqrt{\epsilon_{mach}}$
+in a given floating-point system. Show that if $A=QR$ is the factorization 
+for this matrix, then R is not singulare, even in floating-point arithmetic.
+\solution
+\[
+A = QR
+\]
+
+\[
+\underbrace{\begin{bmatrix}
+  . & . \\
+  . & . \\
+  . & .
+\end{bmatrix}}_A
+=
+\underbrace{\begin{bmatrix}
+  . & . \\
+  . & . \\
+  . & .
+\end{bmatrix}}_Q
+\underbrace{\begin{bmatrix}
+  . & . \\
+  . & .
+\end{bmatrix}}_R
+\]
+
+\[
+\begin{bmatrix}
+  a_1 & a_2
+\end{bmatrix}
+=
+\begin{bmatrix}
+  \hat{q_1} & \hat{q_2}
+\end{bmatrix}
+\begin{bmatrix}
+  r_{11} & r_{12} \\
+  0      & r_{22} \\
+\end{bmatrix}
+\]
+where
+\begin{eqnarray*}
+  a_1 &=& q_1r_{11} \\
+  a_2 &=& \hat{q_1}r_{12} + \hat{q_2}r_{22}
+\end{eqnarray*}
+
+\begin{eqnarray*}
+  q_1 &=&
+  \begin{bmatrix}
+	1 &
+	\epsilon &
+	0
+  \end{bmatrix}_T \\
+\hat{q_1} &=&
+\frac{\begin{bmatrix}
+  1 &
+  \epsilon &
+  0
+\end{bmatrix}^T}{\|q_1\|}
+\cong
+\begin{bmatrix}
+  1 &
+  \epsilon &
+  0
+\end{bmatrix}^T \\
+  q_2 &=&
+  \begin{bmatrix}
+	1 \\
+	0  \\
+	\epsilon
+  \end{bmatrix}
+  -
+  \begin{bmatrix}
+	1 \\
+	\epsilon \\
+	0
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+	0 \\
+	-\epsilon \\
+	\epsilon
+  \end{bmatrix} \\
+\hat{q_2} &=&
+\begin{bmatrix}
+  0 \\[6pt]
+  \frac{-1}{\sqrt{2}} \\[6pt]
+  \frac{1}{\sqrt{2}} 
+\end{bmatrix}
+\end{eqnarray*}
+\begin{eqnarray*}
+  r_{11} &=& 1 \\
+  r_{12} &=& 1 \\
+  r_{22} &=& \sqrt{2}\epsilon
+\end{eqnarray*}
+\[
+det(R) = r_{11}r_{22} - 0r_{12} = \sqrt{2}\epsilon
+\]
+%%%%%%%%%%%% PROBLEM #5 %%%%%%%%%%%%%%%%%%%%%%%%%
+\problem{Scientific Computing 3.2, Page 153}
+A common problem in surverying is to determine the altitudes of a series of points with
+respect to some reerence point. The measurements are subject to error, so more observations
+are taken than are strictly necessary to determine the altitudes, and the resulting 
+overdetermined system is solved in the least squares sense to smooth out errors. Suppose
+that there are four points whose altitudes $x_1$, $x_2$, $x_3$, $x_4$ are to be determined.
+In addition to direct measurements of each $x_i$ with respect to the reference point,
+measurements are also taken of each point with respect to all of the others. The resulting 
+measurements are:
+
+\begin{multicols}{5}
+  \begin{inparablank}
+  \item \(x_1=2.95\)
+  \item \(x_2=1.74\)
+  \item \(x_3=-1.45\)
+  \item \(x_4=1.32\)
+  \item \(x_1 - x_2 = 1.23\)
+  \item \(x_1 - x_3 = 4.45\)
+  \item \(x_1 - x_4 = 1.61\)
+  \item \(x_2 - x_3 = 3.21\)
+  \item \(x_2 - x_4 = 0.45\)
+  \item \(x_3 - x_4 = -2.75\)
+  \end{inparablank}
+\end{multicols}
+
+Set up the corresponding least squares system \(Ax \cong b\) and use a library routine,
+or one of your own design, to solve it for the best values of the altitudes. How do your
+computed values compare with the direct measurements?
+
+\lstinputlisting{./hw3_05/tex.m}
+
+%%%%%%%%%%%% PROBLEM #6 %%%%%%%%%%%%%%%%%%%%%%%%%
+\problem{Scientific Computing 3.4, Page 153}
+\begin{enumerate}
+  \item Solve the following least squares problem using any method you like:
+	\[
+	\begin{bmatrix}
+	  0.16 & 0.10 \\
+	  0.17 & 0.11 \\
+	  2.02 & 1.29
+	\end{bmatrix}
+	\begin{bmatrix}
+	  x_1 \\
+	  x_2 
+	\end{bmatrix}
+	\cong
+	\begin{bmatrix}
+	  0.26 \\
+	  0.28 \\
+	  3.31
+	\end{bmatrix}
+	\]
+  \item Now solve the same least squares probelm again, but this time use the
+	slightly perturbed right-hand side
+	\[
+	b =
+	\begin{bmatrix}
+	  0.27 \\
+	  0.25 \\
+	  3.33
+	\end{bmatrix}
+	\]
+  \item Compare the results from parts \textit{a} and \textit{b}. Can you explain the
+	difference?
+\end{enumerate}
+\solution
+\part
+\lstinputlisting{./hw3_06/tex_a.m}
+\part
+\lstinputlisting{./hw3_06/tex_b.m}
+\part
+The condition number for $A$ is on the order of $10^5$, so we can expect small perturbations to cause
+large changes. In this case, the system in \textit{(a)} is solved exactly, i.e. the residual is the 
+zero vector. This is not the case for in \texit{(b)}, where $x$ is actually the least squares 
+approximate solution to the system.
+
+\end{document}

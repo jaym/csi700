@@ -146,6 +146,15 @@ A =
 \end{bmatrix*}}_{U}
 \]
 
+\[
+L = M^{-1} = M_1^{-1} M_2^{-1} =
+\begin{bmatrix*}[r]
+   1    &    0    &     0 \\
+  -1    &    1    &     0 \\
+   0    &   -1    &     1 \\
+\end{bmatrix*}
+\]
+
 %%%%%%%%%%%% PROBLEM #3 %%%%%%%%%%%%%%%%%%%%%%%%%
 \problem{Scientific Computing 2.18, Page 98}
 Prove that the matrix \[
@@ -311,7 +320,7 @@ A =
 \[
 	\underbrace{\begin{bmatrix*}[r]
 	  1     &    0    &     0   &  0 \\
-	  3     &    1    &     0   &  0 \\
+	  0     &    1    &     0   &  0 \\
 	  0     &    1    &     1   &  0 \\
 	  0     &    0    &     0   &  1 
    \end{bmatrix*}}_{M_2}
@@ -358,7 +367,7 @@ A =
 	\begin{bmatrix*}[r]
 	  1     &    0    &     0   &  0 \\
 	  3     &    1    &     0   &  0 \\
-	  0     &    1    &     1   &  0 \\
+	  0     &   -1    &     1   &  0 \\
 	  1     &    0    &  \frac{1}{2}  & 1
 	\end{bmatrix*}
 \]
@@ -379,7 +388,7 @@ Solve \(Lw = b\)
 	\begin{bmatrix*}[r]
 	  1     &    0    &     0   &  0 \\
 	  3     &    1    &     0   &  0 \\
-	  0     &    1    &     1   &  0 \\
+	  0     &   -1    &     1   &  0 \\
 	  1     &    0    &  \frac{1}{2}  & 1
 	\end{bmatrix*}
 	\begin{bmatrix*}[r]
@@ -459,7 +468,7 @@ Solve \(Lw = y\)
 	\begin{bmatrix*}[r]
 	  1     &    0    &     0   &  0 \\
 	  3     &    1    &     0   &  0 \\
-	  0     &    1    &     1   &  0 \\
+	  0     &   -1    &     1   &  0 \\
 	  1     &    0    &  \frac{1}{2}  & 1
 	\end{bmatrix*}
 	\begin{bmatrix*}[r]
@@ -521,6 +530,35 @@ y
 	   -2 
 	 \end{bmatrix*}
 \]
+\problem{}
+Let A be the \(50x50\) tridiagonal matrix
+\[
+\begin{bmatrix*}
+ 5& -1 &  &  &  & \\ 
+-1 & 5 & -1 &  &  &\\ 
+  & -1 & 5 & -1 &  &\\ 
+ &  &  \ddots & \ddots & \ddots & \\ 
+ &  &  & -1 & 5 & -1 \\ 
+ &  &  &  &  -1 & 5
+\end{bmatrix*}
+\]
 
+Consider the problem \(Ax=b\) for 50 different vectors b of the form
+\[
+\begin{bmatrix*}
+1 &2 &\cdots &49 &50 
+\end{bmatrix*}^{T},
+\begin{bmatrix*}
+2 &3 &\cdots &50 &1 
+\end{bmatrix*}^{T},
+\begin{bmatrix*}
+3 &4 &\cdots &50 &1 & 2 
+\end{bmatrix*}^{T}
+\]
+Write and test code to solve this problem
+\solution
+\lstinputlisting{./hw2_07/hw2_07.m}
+\lstinputlisting{./hw2_07/tridag_solve.m}
+\lstinputlisting{./hw2_07/tridag_factorize.m}
 
 \end{document}
