@@ -5,4 +5,4 @@ for k = 1:k
     e_max = y_k/norm(y_k,inf);
 end
 e_max = e_max/norm(e_max);
-lambda = norm(y_k,inf)
+lambda = norm(y_k,inf);

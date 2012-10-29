@@ -15,23 +15,35 @@ for k = 1:size(v_real,2)
 end
 
 v_power = zeros(1,iterations);
+l_power = zeros(1,iterations);
 for i = 1:iterations
     [v,l] = power_iteration(A, x, i);
     v_power(i) = norm(v - v_real_max,inf);
-    #v_power(i) = abs(l - lambda_max);
+    l_power(i) = abs(l - norm(lambda_max,inf));
 end
 
-plot(-1*log10(v_power));
-
-hold on;
-
 v_rayleigh = zeros(1,iterations);
+l_rayleigh = zeros(1,iterations);
 for i = 1:iterations
     [v,l] = rayleigh_iteration(A, x, i);
     v_rayleigh(i) = norm(abs(v) - abs(v_real_max),inf);
-    #v_rayleigh(i) = abs(l - lambda_max);
+    l_rayleigh(i) = abs(l - norm(lambda_max,inf));
 end
 
-plot(-1*log10(v_rayleigh));
+plot(-1*log10(l_power), 'b');
+hold on;
+plot(-1*log10(l_rayleigh), 'r');
+plot(-1*log10(v_power), 'g')
+plot(-1*log10(v_rayleigh), 'y')
 
+title('Correct Significant Digits');
+xlabel('Iterations');
+ylabel('Digits');
+h_legend = legend("Power Iteration Eigenvalue", 
+"Rayleigh Iteration Eigenvalue", 
+"Power Iteration Eigenvector", 
+"Rayleigh Iteration Eigenvector");
+set(h_legend,'FontSize',10);
+legend boxon
+matlab2tikz('hw4_01_plot.tikz', 'height','\figureheight','width', '\figurewidth');
 hold off;

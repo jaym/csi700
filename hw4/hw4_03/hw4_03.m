@@ -20,15 +20,40 @@ for k = 1:iterations
     v_k(k) = norm(v - v_closest, inf);
     l_k(k) = norm(l - norm(lambda_closest,inf));
 end
+v
+l
 h = figure;
-plot(-1*log10(v_k),'LineWidth', 2);
-title("Correct Significant Digits for Eigenvector");
+plot(-1*log10(v_k),'b', 'LineWidth', 2);
+title("Correct Significant Digits");
 xlabel("k");
 ylabel("Digits");
-print(h, 'hw4_03_eigenvec.pdf')
-h = figure;
-plot(-1*log10(l_k), 'LineWidth', 2);
-title("Correct Significant Digits for Eigenvalue");
-xlabel("k");
-ylabel("Digits");
-print(h, 'hw4_03_eigenval.pdf')
+hold on;
+plot(-1*log10(l_k), 'r', 'LineWidth', 2);
+h_legend = legend("Eigen Vector","Eigen Value");
+legend boxon;
+matlab2tikz('hw4_03_plot.tikz','height','\figureheight','width','\figurewidth');
+hold off;
+
+%Output
+%v_real =
+%
+%  -0.043168  -0.497425  -0.866432
+%  -0.350731   0.819589  -0.453058
+%   0.935481   0.284327  -0.209843
+%
+%lambda_real =
+%
+%Diagonal Matrix
+%
+%   0.57893         0         0
+%         0   2.13307         0
+%         0         0   7.28799
+%
+%v =
+%
+%  -0.49743
+%   0.81959
+%   0.28433
+%
+%l =  2.1331
+
