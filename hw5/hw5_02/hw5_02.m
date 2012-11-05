@@ -3,7 +3,7 @@ f = @(x) sin(10*x) - x;
 fplot(f, [-2,2]);
 grid on
 % Function has 7 zeros
-matlab2tikz('hw5_02_plot.tikz', 'height','\figureheight','width', '\figurewidth');
+matlab2tikz('hw5_02_plot.tikz', 'height','\figureheight','width', '\figurewidth', 'minimumPointsDistance', 0.05);
 
 %(b)
 intervals = -1*(7*pi/20):(pi/10):(7*pi/20);

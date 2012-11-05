@@ -1,0 +1,54 @@
+% This file was created by matlab2tikz v0.2.3.
+% Copyright (c) 2008--2012, Nico Schlömer <nico.schloemer@gmail.com>
+% All rights reserved.
+% 
+% The latest updates can be retrieved from
+%   http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz
+% where you can also make suggestions and rate matlab2tikz.
+% 
+% 
+% 
+\begin{tikzpicture}
+
+\begin{axis}[%
+view={0}{90},
+width=\figurewidth,
+height=\figureheight,
+scale only axis,
+xmin=0, xmax=10,
+xlabel={Iterations},
+xmajorgrids,
+ymin=0, ymax=20,
+ylabel={Digits},
+ymajorgrids,
+title={Correct Significant Digits},
+legend style={nodes=left,legend plot pos=right}]
+\addplot [
+color=blue,
+solid
+]
+coordinates{
+ (1,1.00639743044049)(2,2.53215746482295)(3,5.99532589098157)(4,12.2350888998282)(5,15.9076867327211)(6,16.2435879728467)(7,17.0203225613916)(8,17.0203225613916)(9,17.0203225613916)(10,17.0203225613916) 
+};
+\addlegendentry{Newton's};
+
+\addplot [
+color=red,
+solid
+]
+coordinates{
+ (1,1.00639743044049)(2,1.91782464197644)(3,2.61464073985718)(4,3.86175908436479)(5,5.9422920547507)(6,7.52863491279738)(7,9.26067477518593)(8,12.7413894831584)(9,16.6798691384422)(10,16.6798691384422) 
+};
+\addlegendentry{Broyden's};
+
+\addplot [
+color=green,
+solid
+]
+coordinates{
+ (1,15.653559774527)(2,15.653559774527)(3,15.653559774527)(4,15.653559774527)(5,15.653559774527)(6,15.653559774527)(7,15.653559774527)(8,15.653559774527)(9,15.653559774527)(10,15.653559774527) 
+};
+\addlegendentry{$\epsilon_{mach}$};
+
+\end{axis}
+\end{tikzpicture}%

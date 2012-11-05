@@ -1,7 +1,7 @@
 \documentclass{jhwhw}
 \usepackage{listings}
 \usepackage[T1]{fontenc}
-\usepackage{xcolor}
+%\usepackage{xcolor}
 \usepackage{color}
 \usepackage{moreverb}
 \usepackage{paralist}
@@ -10,6 +10,7 @@
 \usepackage{gnuplot-lua-tikz}
 \usepackage{adjustbox}
 \usepackage{float}
+\usepackage{cleveref}
 
 \definecolor{MyDarkGreen}{rgb}{0.0,0.4,0.0}
 \lstloadlanguages{Matlab}%
@@ -18,7 +19,7 @@
 
 \definecolor{solarized@base03}{HTML}{002B36}
 \definecolor{solarized@base02}{HTML}{073642}
-\definecolor{solarized@base01}{HTML}{586e75}
+\definecolor{solarized@base01}{HTML}{586e75} 
 \definecolor{solarized@base00}{HTML}{657b83}
 \definecolor{solarized@base0}{HTML}{839496}
 \definecolor{solarized@base1}{HTML}{93a1a1}
@@ -112,6 +113,153 @@ This means that the iteration locally converges.
 		have?
 	\item Use a library routine or one of your own design to find all of the zeros of this function.
 \end{enumerate}
+\solution
+\part
+\begin{figure}[H]
+  \label{fighw502}
+  \centering
+  \scalebox{.5}{
+  \newlength\figureheight
+  \newlength\figurewidth
+  \setlength\figureheight{12cm}
+  \setlength\figurewidth{\linewidth} 
+  \input{./hw5_02/hw5_02_plot.tikz}
+  }
+  \caption{$f(x) = sin(10x) - x$}
+
+\end{figure}
+Figure 1 shows that the function $f(x) = sin(10x) - x$ has 7 zeros.
+\part
+\lstinputlisting{./hw5_02/bisection.m}
+\lstinputlisting{./hw5_02/hw5_02.m}
+
+%%%%%%%%%%%% PROBLEM #3 %%%%%%%%%%%%%%%%%%%%%%%%%
+\problem{Exercise 5.8 in Scientific Computing, page 250}
+Consider the problem of finding the smallest positive root of the nonlinear equation
+\(
+cos(x) + 1/(1+e^{-2x}) = 0
+\).
+
+Investigate, both theoretically and epiracllly, the following iterative schemes for solving this problem using the starting point 
+$x_0=3$. For each scheme, you should know that it is indeed an quivalent fixed-point problem, determine analytically
+wheter it is locally convergent and its expected convergence rate, and then implement the method to confirm your results.
+\begin{enumerate}
+  \item $x_{k+1} = arccos(-1/(1+e^{-2x_k}))$ 
+  \item $x_{k+1} = 0.5log(-1/(1+1/cos(x_k)))$
+  \item Newton's method
+\end{enumerate}
+\solution
+\part 
+\begin{eqnarray*}
+cos(x) &+& \frac{1}{1 + e^{-2x}} = 0 \\
+cos(x) &=& \frac{-1}{1+e^{-2x}}
+\end{eqnarray*}
+Looking for $x_{k+1} = g(x)$.
+\[
+x = cos^{-1}\left(\frac{-1}{1+e^{-2x}}\right)
+\]
+so \[g(x) = cos^{-1}\left(\frac{-1}{1+e^{-2x}}\right)\]
+\begin{eqnarray*}
+g^\prime(x) &=& \frac{2e^{2x}}{(e^(2x) + 1)^2\sqrt{\frac{1}{1 - (e^{-2x} + 1)^2}}} \\
+g^\prime(x) &=& 0.07
+\end{eqnarray*}
+This iteration is converges linearly, with $C = 0.07$.
+
+\lstinputlisting{./hw5_03/fixed_point_iteration.m}
+\lstinputlisting{./hw5_03/tex_a.m}
+
+\part
+\begin{eqnarray*}
+  cos(x) &+& \frac{1}{1 + e^{-2x}} = 0 \\
+  - cos(x) &=& \frac{1}{1 + e^{-2x}} \\
+  1 + e^{-2x} &=& \frac{-1}{cos(x)} \\
+  e^{-2x} &=& \frac{-1}{cos(x)} - 1 \\
+  &=& \frac{-1 + cos(x)}{cos(x)} \\
+  e^{2x} &=& \frac{-cos(x)}{1+cos(x)} \\
+  &=& \frac{-1}{1 + \frac{1}{cos(x)}} \\
+  2x &=& ln\left(\frac{-1}{1 + \frac{1}{cos(x)}}\right) \\
+  x  &=& 0.5ln\left(\frac{-1}{1 + \frac{1}{cos(x)}}\right) 
+\end{eqnarray*}
+\begin{eqnarray*}
+g(x)  &=& 0.5ln\left(\frac{-1}{1 + \frac{1}{cos(x)}}\right) \\
+g^\prime(x)  &=& -0.5\frac{tan(x)sec(x)}{sec(x) + 1} \\
+\end{eqnarray*}
+Since $g^\prime(3) = 7.123$, the iteration diverges.
+\lstinputlisting{./hw5_03/tex_b.m}
+
+\part 
+\[
+x_{k+1} = x_{k} - \frac{f(x_k}{f^\prime(x_k)}
+\]
+
+\begin{eqnarray*}
+  f(x) &=& cos(x) + \frac{1}{1+e^{-2x}} \\
+  f^\prime(x) &=& -sin(x) + \frac{2e^{-2x}}{(1+e^{-2x})^2} \\
+  f^{\prime \prime}(x) &=& -cos(x) - \frac{4e^{2x}\left(e^{2x} - 1\right)}{\left(e^{2x} + 1\right)^3}
+\end{eqnarray*}
+\begin{eqnarray*}
+  g^\prime(x) &=& \frac{f(x)f^{\prime \prime}(x)}{f^\prime(x)^2} \\
+  &=& 0.38
+\end{eqnarray*}
+This iteration converges linearly with $C = 0.38$.
+%%%%%%%%%%%% PROBLEM #4 %%%%%%%%%%%%%%%%%%%%%%%%%
+\problem{Exercise 5.12 in Scientific Computing, page 251}
+The vertical distance $y$ that a parachutist falls before opening the parachute is given by the equation 
+$y = log(cosh(t\sqrt{gk}))/k$ where t is the elapsed time in seconds, $g=9.8065m/s^2$ is the acceleration
+due to gravity, and $k = 0.00341m^{-1}$ is a constant related to the air resistance. Use a zero finder to 
+determine the elapased time requred to fall a distance of 1 km.
+\solution
+\lstinputlisting{./hw5_04/hw5_04.m}
+The elapsed time required to fall a distance of $1$ km is $22.436$ seconds.
+%%%%%%%%%%%% PROBLEM #5 %%%%%%%%%%%%%%%%%%%%%%%%%
+\problem{Exercise 5.18 in Scientific Computing, page 252}
+\begin{enumerate}
+  \item Write a routine based on Newton's method to solve the system of nonlinear equations
+	\begin{eqnarray*}
+	  (x_1 + 3)(x_2^3 - 7) + 18 &=& 0 \\
+	  sin(x_2e^{x_1} - 1) &=& 0
+	\end{eqnarray*}
+  \item Write a routine based on Broyden's method to solve the same system with the same starting point.
+  \item Compare the convergence rates of the two methods by computing the error at each iteration, given 
+	that the exact solution $x^* = [0, 1]^T$. How many iterations does each method require to attain full
+	machine precision?
+\end{enumerate}
+
+\solution
+\part
+\begin{eqnarray*}
+  f_1(x_1,x_2) &=& (x_1 + 3)(x_2-y) + 18 = 0 \\
+  &=& x_1x_2^3 - 7x_1 + 3x_2^3 - 3 = 0 \\
+\end{eqnarray*}
+\begin{eqnarray*}
+  \frac{\partial f_1}{\partial x_1} &=& x_2^3 - 7 \\
+  \frac{\partial f_1}{\partial x_2} &=& 3x_1x_2^2 + 9x_2^2
+\end{eqnarray*}
+
+\[
+  f_2(x_1,x_2) = sin\left(x_2e^{x_1} - 1\right) = 0
+\]
+
+\begin{eqnarray*}
+  \frac{\partial f_2}{\partial x_1} &=& x_2 e^{x_1} cos\left(x_2e^{x_1} - 1\right) \\
+  \frac{\partial f_2}{\partial x_2} &=& e^{x_1} cos\left(x_2e^{x_1} - 1\right)
+\end{eqnarray*}
+\lstinputlisting{./hw5_05/tex_a.m}
+
+\part 
+\lstinputlisting{./hw5_05/tex_b.m}
+\part
+\begin{figure}[H]
+  \label{fighw505}
+  \centering
+  \scalebox{.5}{
+  \setlength\figureheight{12cm}
+  \setlength\figurewidth{\linewidth} 
+  \input{./hw5_05/hw5_05_plot.tikz}
+  }
+\end{figure}
+Newton's method converges to within $\epsilon_{mach}$ of the correct solution by the 5th iteration. Broyden's method takes
+9 iterations.
 
 \end{document}
 
